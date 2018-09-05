@@ -11,7 +11,7 @@ you wish to save the iThing.css file from this repo.
 
 ------------------------------------------------------------------------------------
 
-A working sample of this web app can be found at https://collaber.org/stock/
+A working sample of this web app can be found at https://collaber.org/stock/ . 
 Leverages Rest API's from alphavantage.co and newsapi.org to fetch stock prices
 and news articles for the company searched.
 
