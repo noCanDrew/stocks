@@ -29,3 +29,12 @@ Purpose:
   throughout a song. This app simply displays a graph of stock prices for a given
   company and treats news articles about that company as comments in this sound cloud 
   model.
+
+Security (Mixed content / cross domain):
+  Note, this web page is pulling from Rest API's from two different sources and also 
+  embedding links and images referenced again on those API's. Properly designed, 
+  this data would be saved in a DB on the same domain as the site after having been
+  cleaned/hashed/whatever. However, the terms of service from both API providers
+  restricts usage so that this cannot be done. And because this is the equivelent 
+  of a shower thought project I whipped up in a night, making it robust is outside the
+  scope of intended use. 
