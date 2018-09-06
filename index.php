@@ -47,8 +47,8 @@
 	// Generate list of news articles
 	$url = "https://newsapi.org/v2/everything?" .
           "q=" . $tag . "&" .
-          "from=" . $newsStart . "&" .
-          "to=" . $newsEnd . "&" .
+          "from=" . dateAdjust($newsStart, "-", "/", "+1") . "&" .
+          "to=" . dateAdjust($newsEnd, "-", "/", "+1") . "&" .
           "sortBy=popularity&" .
           "apiKey=" . $newsApiKey;
     $json = file_get_contents($url);
@@ -120,51 +120,8 @@
 					<b><?php echo $tag . " News - From " . $date3 . " to " . $date4; ?></b>
 				</p>
 			</div>
-
 			<div id="chart_div" style="width: 100%; height: 500px;"></div>
-
-			<?php/*
-				http://ghusse.github.io/jQRangeSlider/events.html#bindingEvents 
-				Function basically copied directly from their dev notes with a couple small changes
-				for php inserts. However, CSS was heavily modifed to give current look. 
-			*/?>
 			<div id="slider" class = "customSlider"></div>
-			<script>
-			  	$("#slider").dateRangeSlider({
-			  		<?php
-			  			$minDate = "new Date(" . str_replace("-", ", ", $timeRangeStart) . ")";
-			  			$maxDate = "new Date(" . str_replace("-", ", ", $timeRangeEnd) . ")";
-			  			$minNews = "new Date(" . str_replace("-", ", ", $newsStart) . ")";
-			  			$maxNews = "new Date(" . str_replace("-", ", ", $newsEnd) . ")";
-
-			  			echo "
-			  				bounds: {min: " . $minDate . ", max: " . $maxDate . "},
-			    			defaultValues: {min: " . $minNews . ", max: " . $maxNews . "},
-			  			";
-			  		?>
-			    	scales: [{
-			      		first: function(value){ return value; },
-			      		end: function(value) {return value; },
-			      		next: function(value){
-			        		var next = new Date(value);
-			        		return new Date(next.setMonth(value.getMonth() + 1));
-			      		},
-				      	format: function(tickContainer, tickStart, tickEnd){
-				        	tickContainer.addClass("myCustomClass");
-				      	}
-			    	}]
-			  	});
-
-				$("#slider").on("valuesChanging", function(e, data){
-				  	var min = data.values.min;
-				  	var max = data.values.max;
-				  	document.getElementById("min").value = min.getFullYear() + '-' + 
-				  		(min.getMonth() + 1) + '-' + min.getDate();
-				  	document.getElementById("max").value = max.getFullYear() + '-' + 
-				  		(max.getMonth() + 1) + '-' + max.getDate();
-				});
-		    </script>
-
 		    <div>
 		    	<form action="index.php" id="sliderForm" method="GET" enctype="multipart/form-data">
                     <input type="hidden" id="min" name="min" value="">
@@ -175,8 +132,49 @@
                     </button>
                 </form>
 		    </div>
-
 			<div><?php echo $articles; ?></div>
 		</div>
 	</body>
+
+	<script>
+		<?php/*
+			http://ghusse.github.io/jQRangeSlider/events.html#bindingEvents 
+			Function basically copied directly from their dev notes with a couple small changes
+			for php inserts. However, CSS was heavily modifed to give current look. 
+		*/?>
+
+	  	$("#slider").dateRangeSlider({
+	  		<?php
+	  			$minDate = "new Date(" . str_replace("-", ", ", $timeRangeStart) . ")";
+	  			$maxDate = "new Date(" . str_replace("-", ", ", $timeRangeEnd) . ")";
+	  			$minNews = "new Date(" . str_replace("-", ", ", $newsStart) . ")";
+	  			$maxNews = "new Date(" . str_replace("-", ", ", $newsEnd) . ")";
+
+	  			echo "
+	  				bounds: {min: " . $minDate . ", max: " . $maxDate . "},
+	    			defaultValues: {min: " . $minNews . ", max: " . $maxNews . "},
+	  			";
+	  		?>
+	    	scales: [{
+	      		first: function(value){ return value; },
+	      		end: function(value) {return value; },
+	      		next: function(value){
+	        		var next = new Date(value);
+	        		return new Date(next.setMonth(value.getMonth() + 1));
+	      		},
+		      	format: function(tickContainer, tickStart, tickEnd){
+		        	tickContainer.addClass("myCustomClass");
+		      	}
+	    	}]
+	  	});
+
+		$("#slider").on("valuesChanging", function(e, data){
+		  	var min = data.values.min;
+		  	var max = data.values.max;
+		  	document.getElementById("min").value = min.getFullYear() + '-' + 
+		  		(min.getMonth() + 1) + '-' + min.getDate();
+		  	document.getElementById("max").value = max.getFullYear() + '-' + 
+		  		(max.getMonth() + 1) + '-' + max.getDate();
+		});
+    </script>
 </html>
